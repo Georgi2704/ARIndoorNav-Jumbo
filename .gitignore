@@ -17,3 +17,6 @@ serviceAccountKey.json
 
 #Firebase
 GoogleService-Info.plist
+
+server/.idea/
+server/package.json

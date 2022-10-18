@@ -8,6 +8,6 @@ target 'ARIndoorNav' do
   # Pods for ARIndoorNav
 	pod 'Firebase/Core'     
  	pod 'Firebase/Database'     
-  pod 'Firebase/Auth'
+	pod 'Firebase/Auth'
 
 end

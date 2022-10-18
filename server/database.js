@@ -5,7 +5,7 @@ var serviceAccount = require("./serviceAccountKey.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 
-  databaseURL: "https://arindoornav-56dc2.firebaseio.com"
+  databaseURL: "https://ar-jumbo-default-rtdb.europe-west1.firebasedatabase.app/"
 });
 
 const db = admin.database();
