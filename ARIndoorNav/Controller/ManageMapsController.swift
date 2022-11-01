@@ -337,11 +337,11 @@ extension ManageMapsController: UITableViewDelegate, UITableViewDataSource {
                 DispatchQueue.main.async {
                     self.present(loadingIndicator, animated: false, completion: nil)
                 }
-                guard let uid = Auth.auth().currentUser?.uid else {
-                    self.alert(info: AlertConstants.notLoggedIn)
-                    return
-                }
-                NetworkService.networkServiceSharedInstance.requestUploadCustomMap(URLConstants.uploadCustomMapRequest, uid: uid, locInfo: locInfo, completion: { results in
+//                guard let uid = Auth.auth().currentUser?.uid else {
+//                    self.alert(info: AlertConstants.notLoggedIn)
+//                    return
+//                }
+                NetworkService.networkServiceSharedInstance.requestUploadCustomMap(URLConstants.uploadCustomMapRequest, locInfo: locInfo, completion: { results in
                     switch results{
                         case .failure(_):
                             DispatchQueue.main.async {

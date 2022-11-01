@@ -21,8 +21,8 @@
 import Foundation
 import UIKit
 
-//let ipaddress = "192.168.1.208"
-let ipaddress = "145.93.104.235"
+let ipaddress = "192.168.2.7"
+//let ipaddress = "145.93.104.190"
 
 struct AppThemeColorConstants{
     static let blue = UIColor(red: 0/255, green: 185/255, blue: 242/255, alpha: 1)

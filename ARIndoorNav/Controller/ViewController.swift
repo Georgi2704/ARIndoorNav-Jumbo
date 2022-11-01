@@ -584,6 +584,34 @@ class ViewController: UIViewController{
             dataStore.setLocationInfoList(list: customMapList)
             self.dataModelSharedInstance!.getDataStoreManager().saveDataStore()
             
+            
+            let loadingIndicator = ViewController.getLoadingIndicator()
+            DispatchQueue.main.async {
+                self.present(loadingIndicator, animated: false, completion: nil)
+            }
+           
+            let locInfo = customMap
+            
+            NetworkService.networkServiceSharedInstance.requestUploadCustomMap(URLConstants.uploadCustomMapRequest, locInfo: locInfo, completion: { results in
+                switch results{
+                    case .failure(_):
+                        DispatchQueue.main.async {
+                            loadingIndicator.dismiss(animated: false, completion: {
+                                self.alert(info: AlertConstants.failedMapUpload)
+                            })
+                        }
+                    case .success(let data):
+                        //Server sends back a message indicating success/failure.
+                        let message = Formatter.FormatterSharedInstance.decodeJSONMessage(JSONdata: data)
+                        DispatchQueue.main.async {
+                            loadingIndicator.dismiss(animated: false, completion: {
+                                self.alert(info: message)
+                            })
+                        }
+                }
+            })
+            
+            
             //Resets to normal state
             self.dataModelSharedInstance!.resetNavigationToRestingState()
             self.resetToNormalState()
