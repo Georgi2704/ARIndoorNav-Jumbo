@@ -400,7 +400,7 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
             }
             
             //This is the area where you are able to choose what markers you want to use. The way this is setup right now is that every marker returns the same uniform AR Object.
-            if imageAnchor.referenceImage.name == "pi" || imageAnchor.referenceImage.name == "1"{
+            if imageAnchor.referenceImage.name == "pi" || imageAnchor.referenceImage.name == "jumbo_ar_3" || imageAnchor.referenceImage.name == "1"{
                 shapeNode = dataModelSharedInstance!.getNodeManager().getbeaconNode()
             }
             guard let shape = shapeNode else {return nil}
