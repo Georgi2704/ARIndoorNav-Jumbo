@@ -31,11 +31,30 @@ class ManageMapsController: UIViewController {
      */
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.dismiss(animated: true, completion: nil)
+
         self.dataModelSharedInstance = DataModel.dataModelSharedInstance
         resetState()
         hideKeyboardWhenTappedAround()
         configureUI()
         configureTableView()
+        
+        let button = UIButton(frame: CGRect(x: 100,y: 300,width: 200,height: 60))
+        button.setTitle("Create Custom Map", for: .normal)
+        button.setTitleColor(.systemBlue,for: .normal)
+        button.addTarget(self,action: #selector(buttonAction),for: .touchUpInside)
+        self.view.addSubview(button)
+        
+        self.dataModelSharedInstance!.getLocationDetails().setIsCreatingCustomMap(isCreatingCustomMap: true)
+        //Refers to delegate, ContainerController and calls the function createCustomMapProcess() which invokes the main VC (housing the ARSceneView) to begin creating a custom map.
+        self.manageMapsControllerDelegate!.createCustomMapProcess()
+    }
+    
+    @objc func buttonAction() {
+        self.dataModelSharedInstance!.getLocationDetails().setIsCreatingCustomMap(isCreatingCustomMap: true)
+        //Refers to delegate, ContainerController and calls the function createCustomMapProcess() which invokes the main VC (housing the ARSceneView) to begin creating a custom map.
+        self.manageMapsControllerDelegate!.createCustomMapProcess()
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Selectors
@@ -66,6 +85,12 @@ class ManageMapsController: UIViewController {
     /*/ resetState()
      Resets the View Controller state to the normal state by resetting the DataModel.LocationDetails variables to false
      */
+    private func uploadState(){
+        self.dataModelSharedInstance!.getLocationDetails().setIsCreatingCustomMap(isCreatingCustomMap: true)
+        //Refers to delegate, ContainerController and calls the function createCustomMapProcess() which invokes the main VC (housing the ARSceneView) to begin creating a custom map.
+        self.manageMapsControllerDelegate!.createCustomMapProcess()
+    }
+    
     private func resetState(){
         self.dataModelSharedInstance!.getLocationDetails().setIsCreatingCustomMap(isCreatingCustomMap: false)
         self.dataModelSharedInstance!.getLocationDetails().setIsUploadingMap(isSet: false)
@@ -103,36 +128,6 @@ class ManageMapsController: UIViewController {
             }
         }))
         //Users will only be allowed to download maps if they are logged in.
-        alertController.addAction(UIAlertAction(title: "Download Custom Maps", style: .default, handler: { _ in
-            if Auth.auth().currentUser == nil {
-                self.alert(info: AlertConstants.notLoggedIn)
-            } else {
-                let loadingIndicator = ViewController.getLoadingIndicator()
-                DispatchQueue.main.async {
-                    self.present(loadingIndicator, animated: false, completion: nil)
-                    self.toggleCancelButton(shouldShow: false)
-                    self.dataModelSharedInstance!.getLocationDetails().setIsUploadingMap(isSet: false)
-                    self.dataModelSharedInstance!.getLocationDetails().setIsCreatingCustomMap(isCreatingCustomMap:false)
-                }
-                //Network request to the node.js server to get a list of downloaded custom map names.
-                NetworkService.networkServiceSharedInstance.requestDownloadCustomMapNames(URLConstants.downloadableMapNames, uid: Auth.auth().currentUser!.uid, completion: { results in
-                    switch results{
-                        case .failure(_):
-                            DispatchQueue.main.async {
-                                loadingIndicator.dismiss(animated: false, completion: {
-                                    self.alert(info: AlertConstants.serverRequestFailed)
-                                })
-                            }
-                        case .success(let data):
-                            DispatchQueue.main.async {
-                                loadingIndicator.dismiss(animated: false, completion: {
-                                    self.generateDownloadableOptionsAlert(data: data)
-                                })
-                            }
-                    }
-                })
-            }
-        }))
         alertController.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
 
         present(alertController, animated: true, completion: nil)
@@ -142,67 +137,11 @@ class ManageMapsController: UIViewController {
      
      @param: data - Data - data sent back as an object from the nodejs server
      */
-    private func generateDownloadableOptionsAlert(data: Data) {
-        let options = Formatter.FormatterSharedInstance.decodeDownloadableCustomMapsNames(JSONdata: data)
-        if options != nil {
-            let alertController = UIAlertController(title: "Select the Custom Map to download", message: "Note: Maps with the same name will be overwritten", preferredStyle: .alert)
-            
-            for (_, ele) in options!.enumerated() {
-                alertController.addAction(UIAlertAction(title: ele, style: .default, handler: { (action) in
-                    let title = action.title
-                    self.downloadCustomMap(title: title!)
-                }))
-            }
-            alertController.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-            self.present(alertController, animated: false, completion: nil)
-        } else {
-            self.alert(info: "No Custom Maps are saved in your profile")
-        }
-    }
     /*/ downloadCustomMap(title: String)
      Receives a title of the name of the map the user wants to download. It uses this name to make a request to the node.js server for navigation information which then saves the map to the user's device.
      
      @param: data - Data - data sent back as an object from the nodejs server
      */
-    private func downloadCustomMap(title: String) {
-        let loadingIndicator = ViewController.getLoadingIndicator()
-        DispatchQueue.main.async {
-            self.present(loadingIndicator, animated: false, completion: nil)
-        }
-        
-        //Request to the network service handler - NetworkService.swift
-        NetworkService.networkServiceSharedInstance.requestDownloadCustomMap(URLConstants.downloadCustomMap, mapName: title, uid: Auth.auth().currentUser!.uid, completion: { result in
-            switch result{
-            case .failure(_):
-                DispatchQueue.main.async {
-                        loadingIndicator.dismiss(animated: false, completion: {
-                        self.alert(info: AlertConstants.serverRequestFailed)
-                    })
-                }
-            case .success(let data):
-                DispatchQueue.main.async {
-                        loadingIndicator.dismiss(animated: false, completion: {
-                            //Decodes the data through a formatter class.
-                            let locInfo = Formatter.FormatterSharedInstance.decodeJSONDestination(JSONdata: data)
-                            let ds = DataStoreManager.dataStoreManagerSharedInstance.dataStore
-                            var list = ds.getLocationInfoList()
-                            
-                            //Loops through currently saved maps, if the name matches the one that was just downloaded, it is removed.
-                            for (i, e) in list.enumerated(){
-                                if e.destination == title {
-                                    list.remove(at: i)
-                                }
-                            }
-                            list.append(locInfo!)
-                            ds.setLocationInfoList(list: list)
-                            DataStoreManager.dataStoreManagerSharedInstance.saveDataStore()
-                            
-                            self.tableView.reloadData()
-                    })
-                }
-            }
-        })
-    }
     /*/ toggleCancelButton(shouldShow : Bool)
      Toggles the visibility of the cancel button.
      
@@ -252,8 +191,8 @@ class ManageMapsController: UIViewController {
     private func configureTableView(){
         tableView = UITableView()
         
-        tableView.delegate = self
-        tableView.dataSource = self
+//        tableView.delegate = self
+//        tableView.dataSource = self
         tableView.backgroundColor = AppThemeColorConstants.white
         tableView.rowHeight = 60
         
@@ -293,108 +232,109 @@ class ManageMapsController: UIViewController {
  This extension allows the viewcontroller to handle the responsibility of the tableView.
  Handles all actions within the tableview accounting for the changes in state.
  */
-extension ManageMapsController: UITableViewDelegate, UITableViewDataSource {
-    /*/ tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-     Implemented function which decides how many rows are available within the tableView.
-     */
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //Count of saved custom maps stored on device.
-        let length = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList().count
-        return length
-    }
-    /*/ tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
-     Implemented function which handles the appearance of each cell. Uses a MapOptionCell as the cell.
-     */
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let locInfo = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList()[indexPath.row]
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier
-            , for: indexPath) as! MapOptionCell
-        
-        cell.descriptionLabel.text = locInfo.destination
-        cell.iconImageView.image = UIImage(systemName: "map.fill") ?? UIImage()
-        
-        return cell
-    }
-    /*/ tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-     Handles what happens when a cell is selected. There are two states (normal/uploading).
-     Clicking on a cell in normal state kicks off navigation.
-     Clicking on a cell during uploading kicks off uploading the map to Firebase through node.js server.
-    */
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let locInfo = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList()[indexPath.row]
-        
-        //Code block for uploading a custom map.
-        if (dataModelSharedInstance!.getLocationDetails().isUploadingMap) {
-            self.tableView.deselectRow(at: indexPath, animated: true)
-            let name = locInfo.destination
-            let fullString = "Is '\(name)' the correct map?\n\nNote: Maps with the same name will be overwritten"
-            
-            let alert = UIAlertController(title: "Alert", message: fullString, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
-            alert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { _ in
-                let loadingIndicator = ViewController.getLoadingIndicator()
-                DispatchQueue.main.async {
-                    self.present(loadingIndicator, animated: false, completion: nil)
-                }
-//                guard let uid = Auth.auth().currentUser?.uid else {
-//                    self.alert(info: AlertConstants.notLoggedIn)
-//                    return
+
+//extension ManageMapsController: UITableViewDelegate, UITableViewDataSource {
+//    /*/ tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+//     Implemented function which decides how many rows are available within the tableView.
+//     */
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        //Count of saved custom maps stored on device.
+//        let length = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList().count
+//        return length
+//    }
+//    /*/ tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+//     Implemented function which handles the appearance of each cell. Uses a MapOptionCell as the cell.
+//     */
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let locInfo = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList()[indexPath.row]
+//
+//        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier
+//            , for: indexPath) as! MapOptionCell
+//
+//        cell.descriptionLabel.text = locInfo.destination
+//        cell.iconImageView.image = UIImage(systemName: "map.fill") ?? UIImage()
+//
+//        return cell
+//    }
+//    /*/ tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+//     Handles what happens when a cell is selected. There are two states (normal/uploading).
+//     Clicking on a cell in normal state kicks off navigation.
+//     Clicking on a cell during uploading kicks off uploading the map to Firebase through node.js server.
+//    */
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let locInfo = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList()[indexPath.row]
+//
+//        //Code block for uploading a custom map.
+//        if (dataModelSharedInstance!.getLocationDetails().isUploadingMap) {
+//            self.tableView.deselectRow(at: indexPath, animated: true)
+//            let name = locInfo.destination
+//            let fullString = "Is '\(name)' the correct map?\n\nNote: Maps with the same name will be overwritten"
+//
+//            let alert = UIAlertController(title: "Alert", message: fullString, preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "Cancel", style: .destructive, handler: nil))
+//            alert.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { _ in
+//                let loadingIndicator = ViewController.getLoadingIndicator()
+//                DispatchQueue.main.async {
+//                    self.present(loadingIndicator, animated: false, completion: nil)
 //                }
-                NetworkService.networkServiceSharedInstance.requestUploadCustomMap(URLConstants.uploadCustomMapRequest, locInfo: locInfo, completion: { results in
-                    switch results{
-                        case .failure(_):
-                            DispatchQueue.main.async {
-                                loadingIndicator.dismiss(animated: false, completion: {
-                                    self.alert(info: AlertConstants.failedMapUpload)
-                                })
-                            }
-                        case .success(let data):
-                            //Server sends back a message indicating success/failure.
-                            let message = Formatter.FormatterSharedInstance.decodeJSONMessage(JSONdata: data)
-                            DispatchQueue.main.async {
-                                loadingIndicator.dismiss(animated: false, completion: {
-                                    self.alert(info: message)
-                                })
-                            }
-                    }
-                })
-                
-            }))
-            self.present(alert, animated: true, completion: nil)
-        } else {
-            //Code block for clicking on a map in normal state.
-            self.dismiss(animated: true, completion: nil)
-            let destinationName = locInfo.destination
-            let nodeList = locInfo.nodes.index
-            
-            let referencedBeaconName = locInfo.beaconName
-            
-            dataModelSharedInstance!.getNodeManager().setNodeList(list: nodeList)
-            dataModelSharedInstance!.getNodeManager().setIsNodeListGenerated(isSet: true)
-            
-            DispatchQueue.main.async {
-                self.dataModelSharedInstance!.getMainVC().destinationFound(destination: destinationName)
-            }
-        }
-    }
-    /*/ tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-     Allows the sliding motion of the cell in order to allow deletion.
-    */
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    /*/ tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
-     Handles the deletion of the custom map.
-    */
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if (editingStyle == .delete){
-            let row = indexPath.row
-            var list = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList()
-            list.remove(at: row)
-            dataModelSharedInstance!.getDataStoreManager().dataStore.setLocationInfoList(list: list)
-            dataModelSharedInstance!.getDataStoreManager().saveDataStore()
-            self.tableView.reloadData()
-        }
-    }
-}
+////                guard let uid = Auth.auth().currentUser?.uid else {
+////                    self.alert(info: AlertConstants.notLoggedIn)
+////                    return
+////                }
+//                NetworkService.networkServiceSharedInstance.requestUploadCustomMap(URLConstants.uploadCustomMapRequest, locInfo: locInfo, completion: { results in
+//                    switch results{
+//                        case .failure(_):
+//                            DispatchQueue.main.async {
+//                                loadingIndicator.dismiss(animated: false, completion: {
+//                                    self.alert(info: AlertConstants.failedMapUpload)
+//                                })
+//                            }
+//                        case .success(let data):
+//                            //Server sends back a message indicating success/failure.
+//                            let message = Formatter.FormatterSharedInstance.decodeJSONMessage(JSONdata: data)
+//                            DispatchQueue.main.async {
+//                                loadingIndicator.dismiss(animated: false, completion: {
+//                                    self.alert(info: message)
+//                                })
+//                            }
+//                    }
+//                })
+//
+//            }))
+//            self.present(alert, animated: true, completion: nil)
+//        } else {
+//            //Code block for clicking on a map in normal state.
+//            self.dismiss(animated: true, completion: nil)
+//            let destinationName = locInfo.destination
+//            let nodeList = locInfo.nodes.index
+//
+//            let referencedBeaconName = locInfo.beaconName
+//
+//            dataModelSharedInstance!.getNodeManager().setNodeList(list: nodeList)
+//            dataModelSharedInstance!.getNodeManager().setIsNodeListGenerated(isSet: true)
+//
+//            DispatchQueue.main.async {
+//                self.dataModelSharedInstance!.getMainVC().destinationFound(destination: destinationName)
+//            }
+//        }
+//    }
+//    /*/ tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+//     Allows the sliding motion of the cell in order to allow deletion.
+//    */
+//    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//    /*/ tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
+//     Handles the deletion of the custom map.
+//    */
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//        if (editingStyle == .delete){
+//            let row = indexPath.row
+//            var list = dataModelSharedInstance!.getDataStoreManager().dataStore.getLocationInfoList()
+//            list.remove(at: row)
+//            dataModelSharedInstance!.getDataStoreManager().dataStore.setLocationInfoList(list: list)
+//            dataModelSharedInstance!.getDataStoreManager().saveDataStore()
+//            self.tableView.reloadData()
+//        }
+//    }
+//}

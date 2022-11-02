@@ -21,7 +21,7 @@
 import Foundation
 import UIKit
 
-let ipaddress = "192.168.2.7"
+let ipaddress = "145.93.104.164"
 //let ipaddress = "145.93.104.190"
 
 struct AppThemeColorConstants{

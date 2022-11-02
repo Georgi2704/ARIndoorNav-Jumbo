@@ -139,12 +139,18 @@ class ContainerController: UIViewController {
                 controller.modalPresentationStyle = .fullScreen
                 present(controller, animated: true, completion: nil)
             case .Maps:
+            
+            
                 let mapsController = ManageMapsController()
                 mapsController.manageMapsControllerDelegate = self
-                let controller = UINavigationController(rootViewController: mapsController)
-                controller.navigationItem.hidesSearchBarWhenScrolling = false
-                controller.modalPresentationStyle = .fullScreen
-                present(controller, animated: true, completion: nil)
+            
+            self.dataModelSharedInstance!.getLocationDetails().setIsCreatingCustomMap(isCreatingCustomMap: true)
+
+            mapsController.manageMapsControllerDelegate!.createCustomMapProcess()
+//            let controller = UINavigationController(rootViewController: mapsController)
+//                controller.navigationItem.hidesSearchBarWhenScrolling = false
+//                controller.modalPresentationStyle = .fullScreen
+//                present(controller, animated: true, completion: nil)
         }
     }
     /*/ animateStatusBar ()
