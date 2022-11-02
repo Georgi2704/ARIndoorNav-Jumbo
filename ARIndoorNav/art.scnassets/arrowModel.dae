@@ -4,8 +4,8 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2020-06-15T18:45:30Z</created>
-  <modified>2020-06-15T18:45:30Z</modified>
+  <created>2022-11-02T13:56:37Z</created>
+  <modified>2022-11-02T13:56:37Z</modified>
   <unit meter="1.000000"/>
   <up_axis>Y_UP</up_axis>
  </asset>
@@ -68,13 +68,13 @@
     <technique sid="common">
      <phong>
       <emission>
-       <color>0 0.27451 0.568627 1</color>
+       <color>1 0.768627 0.137255 1</color>
       </emission>
       <ambient>
        <color>0 0 0 1</color>
       </ambient>
       <diffuse>
-       <color>0 0.27451 0.568627 1</color>
+       <color>1 0.768627 0.137255 1</color>
       </diffuse>
       <specular>
        <color>0 0.01098 0.022745 1</color>

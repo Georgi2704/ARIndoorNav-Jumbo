@@ -89,7 +89,7 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
         let sphere = SCNSphere(radius: 0.05)
         //Makes the AR Node a sphere
         let node = SCNNode(geometry: sphere)
-        node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.blue
+        node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.gold
         
         let xOffset = to.xOffset
         let yOffset = to.yOffset
@@ -205,7 +205,7 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
         case NodeType.destination.rawValue:
             node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.white
         case NodeType.intermediate.rawValue:
-            node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.blue
+            node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.gold
         default:
             break
         }
