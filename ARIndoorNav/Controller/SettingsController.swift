@@ -35,7 +35,7 @@ class SettingsController: UIViewController {
     private func configureNavigationBar(){
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = AppThemeColorConstants.blue
+            appearance.backgroundColor = AppThemeColorConstants.gold
             appearance.titleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
             appearance.largeTitleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
             

@@ -41,7 +41,7 @@ class MenuController: UIViewController {
         tableView.dataSource = self
         
         tableView.register(MenuOptionCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.backgroundColor = AppThemeColorConstants.blue
+        tableView.backgroundColor = AppThemeColorConstants.gold
         tableView.separatorStyle = .none
         tableView.rowHeight = TableViewConstants.rowHeight
         

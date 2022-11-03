@@ -269,7 +269,7 @@ class ViewController: UIViewController{
         addButton.translatesAutoresizingMaskIntoConstraints = false
         addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: ButtonConstants.font)
         addButton.setTitle("Add", for: .normal)
-        addButton.setTitleColor(AppThemeColorConstants.blue, for: .normal)
+        addButton.setTitleColor(AppThemeColorConstants.gold, for: .normal)
         addButton.backgroundColor = AppThemeColorConstants.white
         addButton.addTarget(self, action: #selector(addButtonClicked), for: .touchUpInside)
         
@@ -290,7 +290,7 @@ class ViewController: UIViewController{
         undoButton.translatesAutoresizingMaskIntoConstraints = false
         undoButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: ButtonConstants.font)
         undoButton.setTitle("Undo", for: .normal)
-        undoButton.setTitleColor(AppThemeColorConstants.blue, for: .normal)
+        undoButton.setTitleColor(AppThemeColorConstants.gold, for: .normal)
         undoButton.backgroundColor = AppThemeColorConstants.white
         undoButton.addTarget(self, action: #selector(undoButtonClicked), for: .touchUpInside)
         
@@ -311,7 +311,7 @@ class ViewController: UIViewController{
         endButton.translatesAutoresizingMaskIntoConstraints = false
         endButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: ButtonConstants.font)
         endButton.setTitle("End", for: .normal)
-        endButton.setTitleColor(AppThemeColorConstants.blue, for: .normal)
+        endButton.setTitleColor(AppThemeColorConstants.gold, for: .normal)
         endButton.backgroundColor = AppThemeColorConstants.white
         endButton.addTarget(self, action: #selector(endButtonClicked), for: .touchUpInside)
         
@@ -332,7 +332,7 @@ class ViewController: UIViewController{
         saveButton.translatesAutoresizingMaskIntoConstraints = false
         saveButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: ButtonConstants.font)
         saveButton.setTitle("Save", for: .normal)
-        saveButton.setTitleColor(AppThemeColorConstants.blue, for: .normal)
+        saveButton.setTitleColor(AppThemeColorConstants.gold, for: .normal)
         saveButton.backgroundColor = AppThemeColorConstants.white
         saveButton.addTarget(self, action: #selector(saveButtonClicked), for: .touchUpInside)
         
@@ -350,7 +350,7 @@ class ViewController: UIViewController{
      */
     func configureBottomLabel(text: String?){
         self.bottomLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.bottomLabel.backgroundColor = AppThemeColorConstants.blue.withAlphaComponent(0.5)
+        self.bottomLabel.backgroundColor = AppThemeColorConstants.gold.withAlphaComponent(0.5)
         self.bottomLabel.textAlignment = .center
         self.bottomLabel.textColor = AppThemeColorConstants.white
         self.bottomLabel.text = text

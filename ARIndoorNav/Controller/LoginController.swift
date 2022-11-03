@@ -25,7 +25,7 @@ class LoginController: UIViewController {
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.contentMode = .scaleAspectFit
         logo.clipsToBounds = true
-        logo.image = #imageLiteral(resourceName: "download.png")
+        logo.image = #imageLiteral(resourceName: "jumbo-logo.png")
         return logo
     }()
     let formTitleView: UILabel = {
@@ -35,32 +35,32 @@ class LoginController: UIViewController {
         label.text = "Sign In"
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 40)
-        label.textColor = AppThemeColorConstants.blue
+        label.textColor = AppThemeColorConstants.gold
         return label
     }()
     lazy var emailContainerView: UIView = {
         let view = UIView()
         let image = UIImage(systemName: "envelope.fill")
         //Located in Extensions.swift
-        return view.textContainerView(view: view, image!, emailTextField, tintColor: AppThemeColorConstants.blue, addMiniText: false, miniText: nil, miniTextTintColor: nil)
+        return view.textContainerView(view: view, image!, emailTextField, tintColor: AppThemeColorConstants.gold, addMiniText: false, miniText: nil, miniTextTintColor: nil)
     }()
     lazy var passwordContainerView: UIView = {
         let view = UIView()
         let image = UIImage(systemName: "lock.fill")
         //Located in Extensions.swift
-        return view.textContainerView(view: view, image!, passwordTextField, tintColor: AppThemeColorConstants.blue, addMiniText: false, miniText: nil, miniTextTintColor: nil)
+        return view.textContainerView(view: view, image!, passwordTextField, tintColor: AppThemeColorConstants.gold, addMiniText: false, miniText: nil, miniTextTintColor: nil)
     }()
     lazy var emailTextField: UITextField = {
         var tf = UITextField()
         //Located in Extensions.swift
-        tf = tf.textField(withPlaceholder: "Email", isSecureTextEntry: false, tintColor: AppThemeColorConstants.blue)
+        tf = tf.textField(withPlaceholder: "Email", isSecureTextEntry: false, tintColor: AppThemeColorConstants.gold)
         tf.delegate = self
         return tf
     }()
     lazy var passwordTextField: UITextField = {
         var tf = UITextField()
         //Located in Extensions.swift
-        tf = tf.textField(withPlaceholder: "Password", isSecureTextEntry: true, tintColor: AppThemeColorConstants.blue)
+        tf = tf.textField(withPlaceholder: "Password", isSecureTextEntry: true, tintColor: AppThemeColorConstants.gold)
         tf.delegate = self
         return tf
     }()
@@ -70,7 +70,7 @@ class LoginController: UIViewController {
         button.setTitle("LOG IN", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.setTitleColor(AppThemeColorConstants.white, for: .normal)
-        button.backgroundColor = AppThemeColorConstants.blue
+        button.backgroundColor = AppThemeColorConstants.gold
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         button.layer.cornerRadius = 5
         return button
@@ -89,8 +89,8 @@ class LoginController: UIViewController {
     let dontHaveAccountButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        let attributedTitle = NSMutableAttributedString(string:"Don't have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: AppThemeColorConstants.blue])
-        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: AppThemeColorConstants.blue]))
+        let attributedTitle = NSMutableAttributedString(string:"Don't have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: AppThemeColorConstants.gold])
+        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: AppThemeColorConstants.gold]))
         button.setAttributedTitle(attributedTitle, for: .normal)
         button.addTarget(self, action: #selector(handleMoveToSignUpButton), for: .touchUpInside)
         return button

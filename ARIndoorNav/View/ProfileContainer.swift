@@ -30,7 +30,7 @@ class ProfileView: UIView {
     }()
     lazy var topContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = AppThemeColorConstants.blue
+        view.backgroundColor = AppThemeColorConstants.gold
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -140,32 +140,32 @@ class ProfileView: UIView {
         
         bottomContainerView.addSubview(firstNameView)
         configureInfoTextBox(view: firstNameView, tf: firstNameTextField, width: width, height: height, tintColor: UIColor.gray, text: "First Name", textColor: UIColor.gray)
-        configureProfileViewTextField(tf: firstNameTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.blue, allowEditing: false, text: firstName!, fontSize: fontSize)
+        configureProfileViewTextField(tf: firstNameTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.gold, allowEditing: false, text: firstName!, fontSize: fontSize)
         firstNameView.setConstraints(top: bottomContainerView.topAnchor, left: bottomContainerView.leftAnchor, bottom: nil, right: nil, paddingTop: padding * 4, paddingLeft: padding, paddingBottom: 0, paddingRight: 0, width: width, height: height)
         
         bottomContainerView.addSubview(lastNameView)
         configureInfoTextBox(view: lastNameView, tf: lastNameTextField, width: width, height: height, tintColor: UIColor.gray, text: "Last Name", textColor: UIColor.gray)
-        configureProfileViewTextField(tf: lastNameTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.blue, allowEditing: false, text: lastName!, fontSize: fontSize)
+        configureProfileViewTextField(tf: lastNameTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.gold, allowEditing: false, text: lastName!, fontSize: fontSize)
         lastNameView.setConstraints(top: bottomContainerView.topAnchor, left: nil, bottom: nil, right: bottomContainerView.rightAnchor, paddingTop: padding * 4, paddingLeft: 0, paddingBottom: 0, paddingRight: padding, width: width, height: height)
         
         bottomContainerView.addSubview(userNameView)
         configureInfoTextBox(view: userNameView, tf: userNameTextField, width: width, height: height, tintColor: UIColor.gray, text: "Username", textColor: UIColor.gray)
-        configureProfileViewTextField(tf: userNameTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.blue, allowEditing: false, text: userName!, fontSize: fontSize)
+        configureProfileViewTextField(tf: userNameTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.gold, allowEditing: false, text: userName!, fontSize: fontSize)
         userNameView.setConstraints(top: firstNameView.bottomAnchor, left: bottomContainerView.leftAnchor, bottom: nil, right: nil, paddingTop: padding * 4, paddingLeft: padding, paddingBottom: 0, paddingRight: 0, width: width, height: height)
         
         bottomContainerView.addSubview(emailView)
         configureInfoTextBox(view: emailView, tf: emailTextField, width: width, height: height, tintColor: UIColor.gray, text: "Email", textColor: UIColor.gray)
-        configureProfileViewTextField(tf: emailTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.blue, allowEditing: false, text: email!, fontSize: fontSize * (3/4))
+        configureProfileViewTextField(tf: emailTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.gold, allowEditing: false, text: email!, fontSize: fontSize * (3/4))
         emailView.setConstraints(top: lastNameView.bottomAnchor, left: nil, bottom: nil, right: bottomContainerView.rightAnchor, paddingTop: padding * 4, paddingLeft: 0, paddingBottom: 0, paddingRight: padding, width: width, height: height)
         
         bottomContainerView.addSubview(phoneNumberView)
         configureInfoTextBox(view: phoneNumberView, tf: phoneNumberTextField, width: width, height: height, tintColor: UIColor.gray, text: "Phone Number", textColor: UIColor.gray)
-        configureProfileViewTextField(tf: phoneNumberTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.blue, allowEditing: false, text: phoneNumber!, fontSize: fontSize)
+        configureProfileViewTextField(tf: phoneNumberTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.gold, allowEditing: false, text: phoneNumber!, fontSize: fontSize)
         phoneNumberView.setConstraints(top: userNameView.bottomAnchor, left: bottomContainerView.leftAnchor, bottom: nil, right: nil, paddingTop: padding * 4, paddingLeft: padding, paddingBottom: 0, paddingRight: 0, width: width, height: height)
 
         bottomContainerView.addSubview(birthdayView)
         configureInfoTextBox(view: birthdayView, tf: birthdayTextField, width: width, height: height, tintColor: UIColor.gray, text: "Birthday", textColor: UIColor.gray)
-        configureProfileViewTextField(tf: birthdayTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.blue, allowEditing: false, text: birthday!, fontSize: fontSize)
+        configureProfileViewTextField(tf: birthdayTextField, backgroundColor: AppThemeColorConstants.white, textColor: AppThemeColorConstants.gold, allowEditing: false, text: birthday!, fontSize: fontSize)
         birthdayView.setConstraints(top: emailView.bottomAnchor, left: nil, bottom: nil, right: bottomContainerView.rightAnchor, paddingTop: padding * 4, paddingLeft: 0, paddingBottom: 0, paddingRight: padding, width: width, height: height)
     }
     /*/ configureProfileViewTextField(tf: UITextField, backgroundColor: UIColor,textColor: UIColor, allowEditing: Bool, text: String, fontSize: CGFloat)

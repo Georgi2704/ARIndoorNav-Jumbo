@@ -26,7 +26,7 @@ class FormController: UIViewController{
         logo.contentMode = .scaleAspectFit
         logo.clipsToBounds = true
         logo.image = UIImage(systemName: "book.fill")
-        logo.tintColor = AppThemeColorConstants.blue
+        logo.tintColor = AppThemeColorConstants.gold
         return logo
     }()
     //Label that indicates the title of the view
@@ -37,42 +37,42 @@ class FormController: UIViewController{
         label.text = "Personal Information"
         label.textAlignment = .center
         label.font = UIFont.boldSystemFont(ofSize: 32)
-        label.textColor = AppThemeColorConstants.blue
+        label.textColor = AppThemeColorConstants.gold
         return label
     }()
     //View housing the first and last name input boxes
     lazy var nameContainerView: UIView = {
         let view = UIView()
         let image = UIImage(systemName: "person.fill")
-        return view.firstLastNameView(view: view, image!, firstNameTextField, lastNameTextField, tintColor: AppThemeColorConstants.blue, width: widthOfScreen!)
+        return view.firstLastNameView(view: view, image!, firstNameTextField, lastNameTextField, tintColor: AppThemeColorConstants.gold, width: widthOfScreen!)
     }()
     //View housing the birthday input box
     lazy var birthdayContainerView: UIView = {
         let view = UIView()
         let image = UIImage(systemName: "calendar")
-        return view.textContainerView(view: view, image!, birthdayTextField, tintColor: AppThemeColorConstants.blue, addMiniText: true, miniText: "MM/DD/YYYY", miniTextTintColor: AppThemeColorConstants.gray)
+        return view.textContainerView(view: view, image!, birthdayTextField, tintColor: AppThemeColorConstants.gold, addMiniText: true, miniText: "MM/DD/YYYY", miniTextTintColor: AppThemeColorConstants.gray)
     }()
     //View housing the phone number input box
     lazy var phoneNumberContainerView: UIView = {
         var view = UIView()
         let image = UIImage(systemName: "phone.fill")
-        return view.textContainerView(view: view, image!, phoneNumberTextField, tintColor: AppThemeColorConstants.blue, addMiniText: false, miniText: nil, miniTextTintColor: nil)
+        return view.textContainerView(view: view, image!, phoneNumberTextField, tintColor: AppThemeColorConstants.gold, addMiniText: false, miniText: nil, miniTextTintColor: nil)
     }()
     lazy var firstNameTextField: UITextField = {
         var tf = UITextField()
-        tf = tf.textField(withPlaceholder: "First Name", isSecureTextEntry: false, tintColor: AppThemeColorConstants.blue)
+        tf = tf.textField(withPlaceholder: "First Name", isSecureTextEntry: false, tintColor: AppThemeColorConstants.gold)
         tf.delegate = self
         return tf
     }()
     lazy var lastNameTextField: UITextField = {
         var tf = UITextField()
-        tf = tf.textField(withPlaceholder: "Last Name", isSecureTextEntry: false, tintColor: AppThemeColorConstants.blue)
+        tf = tf.textField(withPlaceholder: "Last Name", isSecureTextEntry: false, tintColor: AppThemeColorConstants.gold)
         tf.delegate = self
         return tf
     }()
     lazy var birthdayTextField: UITextField = {
         var tf = UITextField()
-        tf = tf.textField(withPlaceholder: "Birthday", isSecureTextEntry: false, tintColor: AppThemeColorConstants.blue)
+        tf = tf.textField(withPlaceholder: "Birthday", isSecureTextEntry: false, tintColor: AppThemeColorConstants.gold)
         tf.keyboardType = UIKeyboardType.numberPad
         tf.delegate = self
         
@@ -80,7 +80,7 @@ class FormController: UIViewController{
     }()
     lazy var phoneNumberTextField: UITextField = {
         var tf = UITextField()
-        tf = tf.textField(withPlaceholder: "Phone Number", isSecureTextEntry: false, tintColor: AppThemeColorConstants.blue)
+        tf = tf.textField(withPlaceholder: "Phone Number", isSecureTextEntry: false, tintColor: AppThemeColorConstants.gold)
         tf.keyboardType = UIKeyboardType.numberPad
         tf.delegate = self
         return tf
@@ -91,7 +91,7 @@ class FormController: UIViewController{
         button.setTitle("CONFIRM", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.setTitleColor(AppThemeColorConstants.white, for: .normal)
-        button.backgroundColor = AppThemeColorConstants.blue
+        button.backgroundColor = AppThemeColorConstants.gold
         button.addTarget(self, action: #selector(handleConfirm), for: .touchUpInside)
         button.layer.cornerRadius = 5
         return button

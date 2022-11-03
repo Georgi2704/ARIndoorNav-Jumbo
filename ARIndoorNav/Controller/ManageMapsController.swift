@@ -165,7 +165,7 @@ class ManageMapsController: UIViewController {
         
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = AppThemeColorConstants.blue
+            appearance.backgroundColor = AppThemeColorConstants.gold
             appearance.titleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
             appearance.largeTitleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
             
@@ -212,7 +212,7 @@ class ManageMapsController: UIViewController {
      */
     func configureCancelButton(){
         self.cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        self.cancelButton.backgroundColor = AppThemeColorConstants.blue.withAlphaComponent(0.60)
+        self.cancelButton.backgroundColor = AppThemeColorConstants.gold.withAlphaComponent(0.60)
         self.cancelButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         self.cancelButton.setTitle("Cancel", for: .normal)
         self.cancelButton.setTitleColor(AppThemeColorConstants.red, for: .normal)

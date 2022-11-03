@@ -119,7 +119,7 @@ class SearchController: UIViewController{
     func configureNavigationBar(){
         if #available(iOS 13.0, *) {
             let appearance = UINavigationBarAppearance()
-            appearance.backgroundColor = AppThemeColorConstants.blue
+            appearance.backgroundColor = AppThemeColorConstants.gold
             appearance.titleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
             appearance.largeTitleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
             
@@ -251,7 +251,7 @@ extension SearchController: UITableViewDataSource{
             cell.textLabel?.text = destinationList[indexPath.row]
         }
         cell.backgroundColor = AppThemeColorConstants.white
-        cell.textLabel?.textColor = AppThemeColorConstants.blue
+        cell.textLabel?.textColor = AppThemeColorConstants.gold
         return cell
     }
 }
