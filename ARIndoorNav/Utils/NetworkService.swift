@@ -104,7 +104,7 @@ class NetworkService {
         success: sends a success with the data containning information on the return string from the server
         failure: sends an error with the data wrapped as NSError
     */
-    func requestUploadCustomMap(_ urlPath: String, uid: String, locInfo: LocationInfo, completion: @escaping(Result<Data, NSError>) -> Void){
+    func requestUploadCustomMap(_ urlPath: String, locInfo: LocationInfo, completion: @escaping(Result<Data, NSError>) -> Void){
         let url = URL(string: urlPath)!
         var request = URLRequest(url: url)
         
@@ -113,7 +113,6 @@ class NetworkService {
         
         //Calls the LocationInfo.swift class to JSONize the object, which heirchally JSONs all data within the object.
         let locInfoJson = locInfo.getJSON()
-        locInfoJson.setValue(uid, forKey: "uid")
 
         guard let httpBody = try? JSONSerialization.data(withJSONObject: locInfoJson) else {return}
         request.httpBody = httpBody

@@ -18,12 +18,12 @@ class MapOptionCell: UITableViewCell {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
-        iv.tintColor = AppThemeColorConstants.blue
+        iv.tintColor = AppThemeColorConstants.gold
         return iv
     }()
     let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.textColor = AppThemeColorConstants.blue
+        label.textColor = AppThemeColorConstants.gold
         label.font = UIFont.systemFont(ofSize: mapViewConstants.font)
         label.text = "Sample Text"
         return label

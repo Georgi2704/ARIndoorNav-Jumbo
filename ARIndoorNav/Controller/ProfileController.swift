@@ -83,7 +83,7 @@ class ProfileController: UIViewController {
     func configureNavigationBar(){
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = AppThemeColorConstants.blue
+        appearance.backgroundColor = AppThemeColorConstants.gold
         appearance.titleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
         appearance.largeTitleTextAttributes = [.foregroundColor: AppThemeColorConstants.white]
         
