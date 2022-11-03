@@ -196,7 +196,7 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
      
      */
     private func placeBuildingNode(sourceNode: SCNNode, lastNode: SCNNode, targetNode: Index){
-        let sphere = SCNSphere(radius: 0.03)
+        let sphere = SCNSphere(radius: 0.05)
         let node = SCNNode(geometry: sphere)
         //Determines color of node
         switch targetNode.type{
@@ -356,10 +356,11 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
                 //Sets world node for intermediate nodes
                 dataModelSharedInstance!.getNodeManager().setReferencedBeaconNode(node: node!)
             }
-        } else {
-            //If the user is not building a custom map or navigating, returns just the marker node with an AR Object bound to its location
-            node = returnBeaconHighlightNode(anchor: anchor)!
         }
+//        else {
+//            //If the user is not building a custom map or navigating, returns just the marker node with an AR Object bound to its location
+//            node = returnBeaconHighlightNode(anchor: anchor)!
+//        }
         return node
     }
     
