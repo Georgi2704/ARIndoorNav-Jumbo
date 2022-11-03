@@ -21,7 +21,7 @@ enum MenuOption: Int, CaseIterable, CustomStringConvertible {
             case .Profile: return "Profile"
             //case .Inbox: return "Inbox"
             //case .Notifications: return "Notifications"
-            case .Maps: return "Manage Maps"
+            case .Maps: return "New AR Map"
             case .Settings: return "Settings"
         }
     }
