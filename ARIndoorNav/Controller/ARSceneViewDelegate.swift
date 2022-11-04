@@ -246,9 +246,6 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
     private func getNodeDataAndPlotBuildingNode(type: NodeType){
         //Gets current position using the camera as a reference
         let cameraTransform = dataModelSharedInstance!.getSceneView().session.currentFrame!.camera.transform
-//        let cameraPosition = SCNVector3Make(cameraTransform.columns.3.x,
-//                                            cameraTransform.columns.3.y, cameraTransform.columns.3.z)
-        
         var translation = matrix_identity_float4x4
         translation.columns.3.z = -1
 
@@ -256,24 +253,6 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
         let anchorTransform = matrix_multiply(cameraTransform, matrix_multiply(translation, rotation))
         let cameraPosition = SCNVector3Make(anchorTransform.columns.3.x,
                                             anchorTransform.columns.3.y, anchorTransform.columns.3.z)
-        
-//        let rotate = simd_float4x4(SCNMatrix4MakeRotation(dataModelSharedInstance!.getSceneView().session.currentFrame!.camera.eulerAngles.y, 0, 1, 0))
-//
-//        let rotateTransform = simd_float4x4(SCNMatrix4MakeTranslation(cameraTransform.columns.3.x, cameraTransform.columns.3.y, cameraTransform.columns.3.z))
-//
-//        let rotateTransformScale = SCNMatrix4MakeScale(cameraTransform.columns.3.x, cameraTransform.columns.3.y, cameraTransform.columns.3.z)
-//
-//        let new = simd_mul(rotate, rotateTransform)
-        
-//
-//        print("Rotate", rotate)
-//        print("Matrix1", rotateTransform)
-//        print("Matrix2", rotateTransformScale)
-//        print("MatrixResult", new)
-
-//        let rotate2 = SCNMatrix4(rotate)
-//        print(rotate2)
-
 
         //The source marker node
         let sourceNode = dataModelSharedInstance!.getNodeManager().getReferencedBeaconNode()
