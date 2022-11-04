@@ -16,6 +16,7 @@
 import Foundation
 import ARKit
 import CoreLocation
+import Accelerate
 class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
     //Singleton
     static let ARSCNViewDelegateInstance = ARSceneViewDelegate()
@@ -196,7 +197,7 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
      
      */
     private func placeBuildingNode(sourceNode: SCNNode, lastNode: SCNNode, targetNode: Index){
-        let sphere = SCNSphere(radius: 0.03)
+        let sphere = SCNSphere(radius: 0.05)
         let node = SCNNode(geometry: sphere)
         //Determines color of node
         switch targetNode.type{
@@ -245,8 +246,14 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
     private func getNodeDataAndPlotBuildingNode(type: NodeType){
         //Gets current position using the camera as a reference
         let cameraTransform = dataModelSharedInstance!.getSceneView().session.currentFrame!.camera.transform
-        let cameraPosition = SCNVector3Make(cameraTransform.columns.3.x,
-                                            cameraTransform.columns.3.y, cameraTransform.columns.3.z)
+        var translation = matrix_identity_float4x4
+        translation.columns.3.z = -1
+
+        let rotation = matrix_float4x4(SCNMatrix4MakeRotation(Float.pi/2, 0, 0, 1))
+        let anchorTransform = matrix_multiply(cameraTransform, matrix_multiply(translation, rotation))
+        let cameraPosition = SCNVector3Make(anchorTransform.columns.3.x,
+                                            anchorTransform.columns.3.y, anchorTransform.columns.3.z)
+
         //The source marker node
         let sourceNode = dataModelSharedInstance!.getNodeManager().getReferencedBeaconNode()
         
@@ -356,10 +363,11 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
                 //Sets world node for intermediate nodes
                 dataModelSharedInstance!.getNodeManager().setReferencedBeaconNode(node: node!)
             }
-        } else {
-            //If the user is not building a custom map or navigating, returns just the marker node with an AR Object bound to its location
-            node = returnBeaconHighlightNode(anchor: anchor)!
         }
+//        else {
+//            //If the user is not building a custom map or navigating, returns just the marker node with an AR Object bound to its location
+//            node = returnBeaconHighlightNode(anchor: anchor)!
+//        }
         return node
     }
     
