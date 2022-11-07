@@ -90,7 +90,17 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
         let sphere = SCNSphere(radius: 0.05)
         //Makes the AR Node a sphere
         let node = SCNNode(geometry: sphere)
-        node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.gold
+        //Determines color of node
+        switch to.type{
+        case NodeType.start.rawValue:
+            node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.transparent
+        case NodeType.destination.rawValue:
+            node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.gold
+        case NodeType.intermediate.rawValue:
+            node.geometry?.firstMaterial?.diffuse.contents = AppThemeColorConstants.transparent
+        default:
+            break
+        }
         
         let xOffset = to.xOffset
         let yOffset = to.yOffset
@@ -135,11 +145,40 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
      @params: to - the node where the line should be end at.
      */
     private func placeLine(sourceNode: SCNNode, from: SCNNode, to: SCNNode){
-        let node = SCNGeometry.cylinderLine(from: from.position, to: to.position, segments: 5)
-        sourceNode.addChildNode(node)
         //Checker to see if the user is building a custom map. If yes, then it refers to the singleton NodeManager.swift and adds a line node.
         if (dataModelSharedInstance!.getLocationDetails().getIsCreatingCustomMap()){
+            let node = SCNGeometry.cylinderLine(from: from.position, to: to.position, segments: 5)
+            sourceNode.addChildNode(node)
             dataModelSharedInstance!.getNodeManager().addLineNode(node: node)
+        }
+        else {
+            let x1 = from.position.x
+            let x2 = to.position.x
+
+            let y1 = from.position.y
+            let y2 = to.position.y
+
+            let z1 = from.position.z
+            let z2 = to.position.z
+
+            let distance = sqrtf((x2 - x1) * (x2 - x1) +
+                (y2 - y1) * (y2 - y1) +
+                (z2 - z1) * (z2 - z1))
+            
+            //Show arrow only if the distance between two nodes is bigger
+            if (distance > 1) {
+                let arrow = dataModelSharedInstance!.getNodeManager().getArrowNode()
+                arrow.position = SCNVector3(((from.position.x + to.position.x)/2),
+                                            ((from.position.y + to.position.y)/2),
+                                            ((from.position.z + to.position.z)/2))
+                
+                //Handles the orientation of the line
+                arrow.eulerAngles = SCNVector3(Float.pi/2,
+                                               acos((to.position.z - from.position.z)/distance),
+                                               atan2(to.position.y - from.position.y, to.position.x - from.position.x))
+                sourceNode.addChildNode(arrow)
+                arrow.look(at: to.position)
+            }
         }
     }
     /*/ buildArray(x: Float, y: Float, z: Float) -> Array<Float>
@@ -175,8 +214,9 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
                 
                 translation.columns.3.x = 0
                 translation.columns.3.y = 0
-                //Raises the position of the arrow above the node (z value)
-                translation.columns.3.z = Float(ArkitNodeDimension.arrowNodeXOffset) * -1
+//                //Raises the position of the arrow above the node (z value)
+//                translation.columns.3.z = Float(ArkitNodeDimension.arrowNodeXOffset) * -1
+                translation.columns.3.z = 0
                 
                 //returns a clone of a SCNNode which was already initialized when NodeManager was initialized.
                 let arrow = dataModelSharedInstance!.getNodeManager().getArrowNode()
