@@ -40,14 +40,14 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
     
     /*/ resetNodeList()
      Reinitalizes nodeList into a new Array of SCNNodes
-    */
+     */
     private func resetNodeList(){
         self.nodeList = Array<SCNNode>()
     }
     /*/ reset()
      Resets beaconImageName to nil
      Resets nodeList to nil
-    */
+     */
     func reset(){
         self.beaconImageName = nil
         self.nodeList = nil
@@ -154,16 +154,16 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
         else {
             let x1 = from.position.x
             let x2 = to.position.x
-
+            
             let y1 = from.position.y
             let y2 = to.position.y
-
+            
             let z1 = from.position.z
             let z2 = to.position.z
-
+            
             let distance = sqrtf((x2 - x1) * (x2 - x1) +
-                (y2 - y1) * (y2 - y1) +
-                (z2 - z1) * (z2 - z1))
+                                 (y2 - y1) * (y2 - y1) +
+                                 (z2 - z1) * (z2 - z1))
             
             //Show arrow only if the distance between two nodes is bigger
             if (distance > 1) {
@@ -173,9 +173,7 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
                                             ((from.position.z + to.position.z)/2))
                 
                 //Handles the orientation of the line
-                arrow.eulerAngles = SCNVector3(Float.pi/2,
-                                               acos((to.position.z - from.position.z)/distance),
-                                               atan2(to.position.y - from.position.y, to.position.x - from.position.x))
+                arrow.eulerAngles = SCNVector3(0, 0, 0)
                 sourceNode.addChildNode(arrow)
                 arrow.look(at: to.position)
             }
@@ -214,14 +212,14 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
                 
                 translation.columns.3.x = 0
                 translation.columns.3.y = 0
-//                //Raises the position of the arrow above the node (z value)
-//                translation.columns.3.z = Float(ArkitNodeDimension.arrowNodeXOffset) * -1
+                //                //Raises the position of the arrow above the node (z value)
+                //                translation.columns.3.z = Float(ArkitNodeDimension.arrowNodeXOffset) * -1
                 translation.columns.3.z = 0
                 
                 //returns a clone of a SCNNode which was already initialized when NodeManager was initialized.
                 let arrow = dataModelSharedInstance!.getNodeManager().getArrowNode()
                 arrow.simdTransform = matrix_multiply(referenceNodeTransform, translation)
-            
+                
                 sourceNode.addChildNode(arrow)
                 //The way the arrow's x,y,z is setup in art.scnassets/arrow.scn allows the arrow to point perfectly towards node2.position when calling SCNNode.look.
                 arrow.look(at: node2.position)
@@ -288,12 +286,12 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
         let cameraTransform = dataModelSharedInstance!.getSceneView().session.currentFrame!.camera.transform
         var translation = matrix_identity_float4x4
         translation.columns.3.z = -1
-
+        
         let rotation = matrix_float4x4(SCNMatrix4MakeRotation(Float.pi/2, 0, 0, 1))
         let anchorTransform = matrix_multiply(cameraTransform, matrix_multiply(translation, rotation))
         let cameraPosition = SCNVector3Make(anchorTransform.columns.3.x,
                                             anchorTransform.columns.3.y, anchorTransform.columns.3.z)
-
+        
         //The source marker node
         let sourceNode = dataModelSharedInstance!.getNodeManager().getReferencedBeaconNode()
         
@@ -404,10 +402,10 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
                 dataModelSharedInstance!.getNodeManager().setReferencedBeaconNode(node: node!)
             }
         }
-//        else {
-//            //If the user is not building a custom map or navigating, returns just the marker node with an AR Object bound to its location
-//            node = returnBeaconHighlightNode(anchor: anchor)!
-//        }
+        //        else {
+        //            //If the user is not building a custom map or navigating, returns just the marker node with an AR Object bound to its location
+        //            node = returnBeaconHighlightNode(anchor: anchor)!
+        //        }
         return node
     }
     
@@ -471,21 +469,21 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
         
         var cameraTransform = dataModelSharedInstance!.getSceneView().session.currentFrame!.camera.transform
         var cameraPosition = SCNVector3Make(cameraTransform.columns.3.x,
-        cameraTransform.columns.3.y, cameraTransform.columns.3.z)
+                                            cameraTransform.columns.3.y, cameraTransform.columns.3.z)
         
         var distance = lastNodePosition.distance(receiver: cameraPosition)
-
+        
         //Allows the asycnrhonous portion of this function
         let group = DispatchGroup()
         group.enter()
         DispatchQueue.global(qos: .default).async {
             while distance > 1.5 && self.dataModelSharedInstance!.getLocationDetails().getIsNavigating(){
-                    cameraTransform = self.dataModelSharedInstance!.getSceneView().session.currentFrame!.camera.transform
-                    cameraPosition = SCNVector3Make(cameraTransform.columns.3.x,
-                    cameraTransform.columns.3.y, cameraTransform.columns.3.z)
-                    
-                    distance = lastNodePosition.distance(receiver: cameraPosition)
-                    usleep(500000)
+                cameraTransform = self.dataModelSharedInstance!.getSceneView().session.currentFrame!.camera.transform
+                cameraPosition = SCNVector3Make(cameraTransform.columns.3.x,
+                                                cameraTransform.columns.3.y, cameraTransform.columns.3.z)
+                
+                distance = lastNodePosition.distance(receiver: cameraPosition)
+                usleep(500000)
             }
             group.leave()
         }
@@ -572,7 +570,7 @@ extension ARSceneViewDelegate: ViewControllerDelegate {
                 self.dataModelSharedInstance!.getMainVC().setBottomLabelText(text: TextConstants.startNodeAddedAddIntermediate)
             }
             dataModelSharedInstance!.getNodeManager().setStartingNodeIsSet(isSet: true)
-
+            
             //Plots the starting node, adds it to the data center, plots on the screen
             getNodeDataAndPlotBuildingNode(type: NodeType.start)
             
@@ -656,8 +654,8 @@ extension SCNGeometry {
         let z2 = to.z
         
         let distance = sqrtf((x2 - x1) * (x2 - x1) +
-            (y2 - y1) * (y2 - y1) +
-            (z2 - z1) * (z2 - z1))
+                             (y2 - y1) * (y2 - y1) +
+                             (z2 - z1) * (z2 - z1))
         
         //Creates a SCNCylinder with the height of it being the distance from the two SCNVector3
         let cylinder = SCNCylinder(radius: 0.005,
