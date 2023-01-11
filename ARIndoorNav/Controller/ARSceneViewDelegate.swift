@@ -171,11 +171,51 @@ class ARSceneViewDelegate: NSObject, ARSCNViewDelegate{
                 arrow.position = SCNVector3(((from.position.x + to.position.x)/2),
                                             ((from.position.y + to.position.y)/2),
                                             ((from.position.z + to.position.z)/2))
-                
+                print(distance)
                 //Handles the orientation of the line
                 arrow.eulerAngles = SCNVector3(0, 0, 0)
                 sourceNode.addChildNode(arrow)
                 arrow.look(at: to.position)
+                
+                var distanceCheck = distance
+                
+                var middleArrowsPositions : [SCNVector3] = []
+                middleArrowsPositions.append(arrow.position)
+//                var middle : SCNVector3 = arrow.position
+                
+                if ((distanceCheck / 2) > 1) {
+                    for middle in middleArrowsPositions {
+                        distanceCheck = sqrtf((middle.x - from.position.x) * (middle.x - from.position.x) +
+                                             (middle.y - from.position.y) * (middle.y - from.position.y) +
+                                             (middle.z - from.position.z) * (middle.z - from.position.z))
+                        print("distance check ",distanceCheck)
+                        // Place arrow in the first half
+                        let firstHalf = dataModelSharedInstance!.getNodeManager().getArrowNode()
+                        firstHalf.position = SCNVector3(((from.position.x + middle.x)/2),
+                                                        ((from.position.y + middle.y)/2),
+                                                        ((from.position.z + middle.z)/2))
+                        //Handles the orientation of the line
+                        firstHalf.eulerAngles = SCNVector3(0, 0, 0)
+                        sourceNode.addChildNode(firstHalf)
+                        firstHalf.look(at: to.position)
+//                        middleArrowsPositions.append(firstHalf.position)
+                        
+                        // Place arrow in the second half
+                        let secondHalf = dataModelSharedInstance!.getNodeManager().getArrowNode()
+                        secondHalf.position = SCNVector3(((middle.x + to.position.x)/2),
+                                                         ((middle.y + to.position.y)/2),
+                                                         ((middle.z + to.position.z)/2))
+                        //Handles the orientation of the line
+                        secondHalf.eulerAngles = SCNVector3(0, 0, 0)
+                        sourceNode.addChildNode(secondHalf)
+                        secondHalf.look(at: to.position)
+                        
+                        middleArrowsPositions = []
+                        
+                        middleArrowsPositions.append(firstHalf.position)
+                        middleArrowsPositions.append(secondHalf.position)
+                    }
+                }
             }
         }
     }
