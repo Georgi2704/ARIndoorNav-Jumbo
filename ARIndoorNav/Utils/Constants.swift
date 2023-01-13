@@ -21,11 +21,11 @@
 import Foundation
 import UIKit
 
-let ipaddress = "145.93.104.164"
-//let ipaddress = "145.93.104.190"
+let ipaddress = "145.93.81.25"
 
 struct AppThemeColorConstants{
     static let gold = UIColor(red: 255/255, green: 196/255, blue: 35/255, alpha: 1.0)
+    static let transparent = UIColor(red: 0/0, green: 0/0, blue: 0/0, alpha: 0)
     static let white : UIColor = .white
     static let red: UIColor = .red
     static let gray: UIColor = .gray
